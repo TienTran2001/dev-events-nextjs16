@@ -1,5 +1,5 @@
-import EventDetails from '@/components/EventDetail';
 import { Suspense } from 'react';
+import EventDetails from '@/components/EventDetail';
 
 const EventDetailsPage = async ({
   params,

@@ -1,6 +1,7 @@
 import EventCard from '@/components/EventCard';
 import ExploreButton from '@/components/ExploreButton';
 import { IEvent } from '@/database';
+import { getEvents } from '@/lib/actions/event.actions';
 import { cacheLife } from 'next/cache';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -8,27 +9,29 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const Page = async () => {
   'use cache';
   cacheLife('hours');
-  const response = await fetch(`${BASE_URL}/api/events`);
-
-  const { events } = await response.json();
+  // const response = await fetch(`${BASE_URL}/api/events`);
+  // const { events } = (await response.json()) as { events: IEvent[] };
+  const events = await getEvents();
 
   return (
     <section>
       <h1 className="text-center">
-        The Hub for Every Dev <br />
-        Event You Can&apos;t Miss
+        The Hub for Every Dev <br /> Event You Can&apos;t Miss
       </h1>
       <p className="text-center mt-5">
         Hackathons, Meetups, and Conferences, All in One Place
       </p>
+
       <ExploreButton />
+
       <div className="mt-20 space-y-7">
         <h3>Featured Events</h3>
-        <ul className="events list-none">
+
+        <ul className="events">
           {events &&
             events.length > 0 &&
             events.map((event: IEvent) => (
-              <li key={event._id.toString()}>
+              <li key={event.title} className="list-none">
                 <EventCard {...event} />
               </li>
             ))}
@@ -37,4 +40,5 @@ const Page = async () => {
     </section>
   );
 };
+
 export default Page;
